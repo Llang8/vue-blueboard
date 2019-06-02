@@ -26,3 +26,4 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 - [ ] Allow authenticated users to create rooms
 - [ ] Add more prompts to Practice Room
 - [ ] Set up WebRTC to allow users to videochat in rooms 
+- [ ] Add difficulty dropdown/selection to practice room.

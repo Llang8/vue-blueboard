@@ -2,6 +2,7 @@
 <div>
     <div class="top-bar">
         <h1>BlueBoard - Room: {{ roomNumber }}</h1>
+        <h1><router-link to="/">Home</router-link></h1>
     </div>
     <div class="content-grid">
         <div class="col1">
@@ -54,6 +55,11 @@ export default {
 .top-bar > h1 {
     margin-right: 20px;
     font-size: 20px;
+}
+
+.top-bar > h1 > a {
+    color: white;
+    text-decoration: none;
 }
 
 .content-grid {

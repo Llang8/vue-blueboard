@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div id="editor">// Enter Code Here, output should be set to a variable called result
+    <div id="editor">// Enter Code Here, output should be set to a variable called result <span v-if='prompt'>{{ prompt.editorValue }}</span>
     </div>
     <div id="editor-break">
         <h1>Output:</h1>
