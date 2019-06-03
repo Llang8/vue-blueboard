@@ -1,4 +1,5 @@
 from app import app,db, login_manager
+from flask_cors import cross_origin
 from flask import request,render_template,redirect,url_for, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from models import User, Prompt, Admin, Message, Solution, Room, Creator
@@ -113,13 +114,14 @@ def delPrompt():
 
 # TODO
 @app.route('/getRandomPrompt/<difficulty>')
+@cross_origin(origin="*",headers=["Content-Type","Authorization"])
 def randomPrompt(difficulty):
     try:
         difficulty = int(difficulty,10)
         prompts = Prompt.query.filter_by(difficulty=difficulty).all()
         prompt = choice(prompts)
 
-        return jsonify(title=prompt.title,body=prompt.body,editor_value=prompt.editor_value,difficulty=prompt.difficulty,expected_value=prompt.expected_value, created_date=prompt.created_date)
+        return jsonify(id=prompt.id, title=prompt.title,body=prompt.body,editor_value=prompt.editor_value,difficulty=prompt.difficulty,expected_value=prompt.expected_value, created_date=prompt.created_date)
 
     except Exception as e:
         return 'Error: {}'.format(e)

@@ -17,12 +17,14 @@
             <button @click="newPrompt()">New Prompt</button>
             <button @click="checkResult()">Check</button>
         </div>
-        <div class="prompt">
-            <h1>Prompt:</h1>
-            <p>{{ prompt.prompt }}</p>
+        <div v-if="prompt">
+            <div class="prompt">
+                <h1>Prompt:</h1>
+                <p>{{ prompt.body }}</p>
+            </div>
+            <!-- Set v-bind prompt to pass in prompt, set key to prompt.name so that if name changes editor updates values -->
+            <editor v-bind:prompt="prompt" :key="prompt.id" class="editor-practice"></editor>
         </div>
-        <!-- Set v-bind prompt to pass in prompt, set key to prompt.name so that if name changes editor updates values -->
-        <editor v-bind:prompt="prompt" :key="prompt.id" class="editor-practice"></editor>
     </div>
 </div>
 </template>
@@ -47,7 +49,17 @@ export default {
         * Gets random prompt from promptHandler
         **************************************/
         newPrompt() {
-            this.prompt = this.promptHandler.getPrompt(this.difficulty);
+            // Save context
+            var ctx = this;
+            this.promptHandler.getPrompt(this.difficulty).then(res => {
+                // Reset editor value, switch escaped newlines to regular new lines
+                var editor_value = JSON.stringify(res.editor_value)
+                res.editor_value = editor_value.replace(/\\n/g, '\n').replace(/\\/g, '')    
+                // Get rid of double quotes on ends from JSON.stringify
+                res.editor_value = res.editor_value.slice(1,res.editor_value.length-1)
+                ctx.prompt = res;
+            })
+            console.log(this.prompt)
         },
         /*************************************
         * Checks global state for current result
@@ -55,21 +67,30 @@ export default {
         *************************************/ 
         checkResult() {
             // If result is correct
-            if ( this.$store.state.result == this.prompt.expected) {
-                this.checkResponse = `Your result: ${this.prompt.expected} is correct`;
+            if ( this.$store.state.result == this.prompt.expected_value) {
+                this.checkResponse = `Your result: ${this.prompt.expected_value} is correct`;
             // If code hasn't been run yet or is equal to null
             } else if ( this.$store.state.result == '') {
                 this.checkResponse = "Received null, make sure you run your code before checking"
             // If result is not null but also not correct
             } else {
-                this.checkResponse = `Incorrect. Expected: ${this.prompt.expected}. Received: ${this.$store.state.result}`;
+                this.checkResponse = `Incorrect. Expected: ${this.prompt.expected_value}. Received: ${this.$store.state.result}`;
             }
         }
     },
     /* Set initial prompt */
     created() {
         this.promptHandler = new PromptHandler();
-        this.prompt = this.promptHandler.getPrompt(this.difficulty);
+        var ctx = this;
+        this.promptHandler.getPrompt(this.difficulty).then(res => {
+            // Reset editor value, switch escaped newlines to regular new lines
+            console.log(JSON.stringify(res.expected_value));
+            var editor_value = JSON.stringify(res.editor_value)
+            res.editor_value = editor_value.replace(/\\n/g, '\n').replace(/\\/g, '')
+            // Get rid of double quotes on ends from JSON.stringify
+            res.editor_value = res.editor_value.slice(1,res.editor_value.length-1)
+            ctx.prompt = res;
+        })
     },
     components: {
         Editor

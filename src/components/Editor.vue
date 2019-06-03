@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div id="editor">// Enter Code Here, output should be set to a variable called result <span v-if='prompt'>{{ prompt.editorValue }}</span>
+    <div id="editor">// Enter Code Here, output should be set to a variable called result <span v-if='prompt'>{{ prompt.editor_value }}</span>
     </div>
     <div id="editor-break">
         <h1>Output:</h1>
@@ -37,6 +37,7 @@ export default {
         this.editor = ace.edit('editor');
         this.editor.setTheme('ace/theme/monokai');
         this.editor.session.setMode('ace/mode/javascript');
+
     },
     methods: {
         /*********************************************
