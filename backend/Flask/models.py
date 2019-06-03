@@ -1,6 +1,7 @@
 from app import db
 from werkzeug.security import generate_password_hash,check_password_hash
 from datetime import datetime
+from flask_login import UserMixin
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -91,8 +92,8 @@ class Message(db.Model):
     def __repr__(self):
         return '<MESSAGE {}'.format(self.id)
 
-class Admin(db.Model):
-    __tablename__ = 'admin'
+class Admin(UserMixin, db.Model):
+    __tablename__ = 'admins'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     role = db.Column(db.String(100))
@@ -100,3 +101,4 @@ class Admin(db.Model):
     
     def __repr__(self):
         return '<ADMIN {}'.format(self.id)
+

@@ -1,7 +1,8 @@
-from app import app,db
+from app import app,db, login_manager
 from flask import request,render_template,redirect,url_for, jsonify
-from models import *
-from forms import PromptForm
+from flask_login import current_user, login_user, logout_user, login_required
+from models import User, Prompt, Admin, Message, Solution, Room, Creator
+from forms import PromptForm, LoginForm
 from random import choice
 
 
@@ -110,8 +111,56 @@ def delPrompt():
     except Exception as e:
         return 'Error {}'.format(e)
 
+# TODO
+@app.route('/getRandomPrompt/<difficulty>')
+def randomPrompt(difficulty):
+    try:
+        difficulty = int(difficulty,10)
+        prompts = Prompt.query.filter_by(difficulty=difficulty).all()
+        prompt = choice(prompts)
+
+        return jsonify(title=prompt.title,body=prompt.body,editor_value=prompt.editor_value,difficulty=prompt.difficulty,expected_value=prompt.expected_value, created_date=prompt.created_date)
+
+    except Exception as e:
+        return 'Error: {}'.format(e)
+    
+#############################################
+# Below begins routes for Admin Panel
+#############################################
+
+@app.route('/login',methods=["GET","POST"])
+def loginAdmin():
+    if current_user.is_authenticated:
+        return redirect(url_for('showPromptForm'))
+
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user is None or not user.check_password_hash(form.password.data):
+            return redirect(url_for('loginAdmin'))
+
+        # Check that user has admin permissions
+        admin = Admin.query.filter_by(user_id=user.id).first()
+        if admin is None:
+            print('TEST')
+            return redirect(url_for('loginAdmin'))
+        
+        
+        login_user(admin,remember=form.remember_me.data)
+
+        return redirect(url_for('showPromptForm'))
+
+    return render_template('login.html',title="Sign In",form=form)
+
+# TODO: Create login user loader when login route is created
+@login_manager.user_loader
+def load_user(id):
+    return Admin.query.get(int(id))
+
 # TODO: SETUP LOGIN REQUIRED FOR ADMIN FUNCTIONS
 @app.route('/promptForm',methods=['GET','POST'])
+@login_required
 def showPromptForm():
     form = PromptForm()
 
@@ -128,17 +177,3 @@ def showPromptForm():
         db.session.commit()
 
     return render_template('addPrompt.html', form=form)
-
-# TODO
-@app.route('/getRandomPrompt/<difficulty>')
-def randomPrompt(difficulty):
-    try:
-        difficulty = int(difficulty,10)
-        prompts = Prompt.query.filter_by(difficulty=difficulty).all()
-        prompt = choice(prompts)
-
-        return jsonify(title=prompt.title,body=prompt.body,editor_value=prompt.editor_value,difficulty=prompt.difficulty,expected_value=prompt.expected_value, created_date=prompt.created_date)
-
-    except Exception as e:
-        return 'Error: {}'.format(e)
-    

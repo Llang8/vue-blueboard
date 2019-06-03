@@ -9,3 +9,11 @@ class PromptForm(FlaskForm):
     difficulty = IntegerField('Difficulty (1-5, 1 being the easiest): ', validators=[DataRequired()])
     expected_value = StringField('Expected value: ', validators=[DataRequired()])
     submit = SubmitField('Add Prompt')
+
+    
+class LoginForm(FlaskForm):
+    # email, password, remember me, submit
+    email = StringField("Email", validators=[DataRequired(),Email()])
+    password = PasswordField("Password",validators=[DataRequired()])
+    remember_me = BooleanField("Remember Me")
+    submit = SubmitField('Login')
