@@ -1,22 +1,28 @@
 from app import app,db
-from flask import request
+from flask import request,render_template,redirect,url_for, jsonify
 from models import *
+from forms import PromptForm
+from random import choice
 
 
 @app.route('/addUser/<username>/<email>/<password>/<is_interviewer>', defaults={'first_name': None, 'last_name':None})
 @app.route('/addUser/<username>/<email>/<password>/<first_name>/<last_name>/<is_interviewer>')
 def addUser(username, email, password, first_name, last_name, is_interviewer):
 
+    # Convert is_interviewer to boolean
     if is_interviewer.lower() == 'true' or is_interviewer == '1':
         is_interviewer = True
     else:
         is_interviewer = False
 
+    # Set user fields and password
     user = User(username=username,email=email,first_name=first_name,last_name=last_name,is_interviewer=is_interviewer)
     user.set_password(password)
 
+    # Add to session
     db.session.add(user)
 
+    # Try to commit, else return error and rollback changes
     try:
         db.session.commit()
         return 'Commited {}'.format(user.username)
@@ -27,23 +33,26 @@ def addUser(username, email, password, first_name, last_name, is_interviewer):
 
 @app.route('/delUser')
 def delUser():
+    
+    # Keep track of user and whether one has been found
     user_found = False
     user = None
-    print(request.args)
+
+    # Try to find by username and delete
     try:
         username = request.args.get('username')
         user = User.query.filter_by(username=username).first()
-        print(user)
         if user:
             user_found = True
             db.session.delete(user)
         
     except Exception as e:
         user_found = False
-    
+        
+    # If user wasn't found by username, try by id
     if user_found == False:
         try:
-            user_id = request.args.get('user_id')
+            user_id = request.args.get('id')
             user = User.query.get(int(user_id,10))
             if user:
                 user_found = True
@@ -52,8 +61,84 @@ def delUser():
         except Exception as e:
             user_found = False
 
+    # If user found commit changes and return username else return 'user not found'
     if user_found == False:
         return 'User not found'
     else:
         db.session.commit()
         return 'Deleted user: {}'.format(user.username)
+
+@app.route('/login/<email>/<password>')
+def login(email,password):
+    try:
+        user = User.query.filter_by(email=email).first()
+        if user.check_password_hash(password):
+            return jsonify(id=user.id,username=user.username,email=user.email,first_name=user.first_name,last_name=user.last_name,is_interviewer=user.is_interviewer,create_date=user.create_date)
+        else:
+            return 'Password Incorrect'
+
+    except Exception as e:
+        return 'Error: {}'.format(e)
+
+@app.route('/addPrompt')
+def addPrompt():
+    try:
+        title = request.args.get('title')
+        body = request.args.get('body')
+        editor_value = request.args.get('editorValue')
+        difficulty = request.args.get('difficulty')
+        expected_value = request.args.get('expectedValue')
+        
+        prompt = Prompt(title=title,body=body,editor_value=editor_value,difficulty=difficulty,expected_value=expected_value)
+
+        db.session.add(prompt)
+        db.session.commit()
+
+        return 'Prompt {} added successfully'.format(title)
+
+    except Exception as e:
+        return 'Error {}'.format(e)
+
+@app.route('/delPrompt')
+def delPrompt():
+    try:
+        prompt_id = request.args.get('id')
+        prompt = Prompt.query.get(int(prompt_id,10))
+        db.session.delete(prompt)
+        db.session.commit()
+        return 'Deleted {}'.format(prompt.id)
+    except Exception as e:
+        return 'Error {}'.format(e)
+
+# TODO: SETUP LOGIN REQUIRED FOR ADMIN FUNCTIONS
+@app.route('/promptForm',methods=['GET','POST'])
+def showPromptForm():
+    form = PromptForm()
+
+    if form.validate_on_submit():
+        print('Form valid')
+        title = form.title.data
+        body = form.body.data
+        editor_value = form.editor_value.data
+        difficulty = form.difficulty.data
+        expected_value = form.expected_value.data
+        
+        prompt = Prompt(title=title,body=body,editor_value=editor_value,difficulty=difficulty,expected_value=expected_value)
+        db.session.add(prompt)
+        db.session.commit()
+
+    return render_template('addPrompt.html', form=form)
+
+# TODO
+@app.route('/getRandomPrompt/<difficulty>')
+def randomPrompt(difficulty):
+    try:
+        difficulty = int(difficulty,10)
+        prompts = Prompt.query.filter_by(difficulty=difficulty).all()
+        prompt = choice(prompts)
+
+        return jsonify(title=prompt.title,body=prompt.body,editor_value=prompt.editor_value,difficulty=prompt.difficulty,expected_value=prompt.expected_value, created_date=prompt.created_date)
+
+    except Exception as e:
+        return 'Error: {}'.format(e)
+    

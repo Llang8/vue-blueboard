@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form class="add-form" method="POST">
+    {{form.csrf_token}}
+    <div>{{form.title.label}} : {{form.title}}</div>
+    <div>{{form.body.label}} : {{form.body}}</div>
+    <div>{{form.editor_value.label}} : {{form.editor_value}}</div>
+    <div>{{form.difficulty.label}} : {{form.difficulty}}</div>
+    <div>{{form.expected_value.label}} : {{form.expected_value}}</div>
+    <div>{{form.submit}}</div>
+</form>
+
+{% endblock %}

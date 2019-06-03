@@ -1,0 +1,9 @@
+.add-form {
+    display: flex;
+    flex-direction: column;
+    background: blue;
+}
+
+.add-form > div {
+    margin: 25px;
+}

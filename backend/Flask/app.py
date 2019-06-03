@@ -1,6 +1,5 @@
-from flask import Flask,request,jsonify
+from flask import Flask,request
 from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
 from config import Config
 import os
 
