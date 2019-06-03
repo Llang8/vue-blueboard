@@ -17,11 +17,9 @@
             <button @click="newPrompt()">New Prompt</button>
             <button @click="checkResult()">Check</button>
         </div>
-        <div v-if="prompt">
-            <div class="prompt">
-                <h1>Prompt:</h1>
-                <p>{{ prompt.body }}</p>
-            </div>
+        <div class="prompt" v-if="prompt">
+            <h1>Prompt:</h1>
+            <p>{{ prompt.body }}</p>
             <!-- Set v-bind prompt to pass in prompt, set key to prompt.name so that if name changes editor updates values -->
             <editor v-bind:prompt="prompt" :key="prompt.id" class="editor-practice"></editor>
         </div>
@@ -137,9 +135,9 @@ export default {
 }
 
 .editor-practice {
-    width: 80%;
+    width: 100%;
     min-width: 400px;
-    height: 80vh;
+    height: 70vh;
     min-height: 400px;
 }
 </style>
