@@ -10,3 +10,7 @@ yarn-error.log
 *.ntvs*
 *.njsproj
 *.sln
+
+backend/Flask/blueboard-env/
+backend/Flask/blueboard-flask/
+backend/Flask/config.py
