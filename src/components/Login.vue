@@ -22,6 +22,8 @@
 </div>
 </template>
 <script>
+import axios from 'axios';
+
 export default {
     data() {
         return {
@@ -64,7 +66,18 @@ export default {
 
         },
         submitLogin() {
-
+            return axios({ url: `http://127.0.0.1:5000/login/${this.email}/${this.password}`, method:'get', timeout:8000})
+            .then(response => {
+                console.log(response.data);
+                if(response.data == 'Password Incorrect') {
+                    this.errors.push('Email or password incorrect')
+                } else {
+                    // If response is a User object, reroute to home page and set global user state
+                    this.$store.state.user = response.data;
+                    this.$router.push({name:'home'})
+                }
+            })
+            .catch(error =>  console.error(error))
         },
         /*******************************************
         * Uses regex to test if email input is valid
@@ -94,7 +107,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: black;
+    color: black !important;
     text-align: left;
 }
 

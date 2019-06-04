@@ -71,6 +71,7 @@ def delUser():
         return 'Deleted user: {}'.format(user.username)
 
 @app.route('/login/<email>/<password>')
+@cross_origin(origin="*",headers=["Content-Type","Authorization"])
 def login(email,password):
     try:
         user = User.query.filter_by(email=email).first()

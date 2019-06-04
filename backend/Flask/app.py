@@ -10,6 +10,7 @@ app = Flask(__name__)
 
 
 cors = CORS(app, resources={"/getRandomPrompt": {"origins": "*"}})
+cors = CORS(app, resources={"/login": {"origins": "*"}})
 
 # Setup config from import
 app.config.from_object(Config)

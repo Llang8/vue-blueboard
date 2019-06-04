@@ -5,7 +5,7 @@
         <input type="text" id="room-number" v-model='roomNumber' placeholder="Enter room number...">
         <button @click="joinRoom()">Join Room</button>
         <button @click="practice()">Practice Coding</button>
-        <button @click="login()">Login</button>
+        <button v-if="this.$store.state.user == null" @click="login()">Login</button>
     </div>
 </div>
 </template>
@@ -27,6 +27,11 @@ export default {
         },
         login() {
             this.$router.push({name:'login'});
+        }
+    },
+    computed: {
+        user() {
+            return this.$store.state.user
         }
     }
 }

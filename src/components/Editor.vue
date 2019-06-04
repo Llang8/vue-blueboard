@@ -63,7 +63,7 @@ export default {
     max-height: 300px;
 }
 
-h1 {
+.editor-break > h1 {
     margin: 0;
     text-align: left;
     width: calc(100% - 20px); /* Get width minus the padding */

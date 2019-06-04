@@ -71,7 +71,7 @@ export class PromptHandler {
         console.log(this.prompts[0])
         return axios({ url: `http://127.0.0.1:5000/getRandomPrompt/${difficulty}`, method:'get', timeout:8000})
             .then(response => response.data)
-            .catch(error =>  console.error(error) )
+            .catch(error =>  console.error(error))
     }
 
 
