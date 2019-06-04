@@ -20,7 +20,7 @@ import { AceHandler } from '../lib/aceHandler';
 
 export default {
     // Pass in prompt for practice page
-    props: ['prompt'],
+    props: ['prompt', 'roomNumber','socket'],
     data () {
         return {
             editor: null,
@@ -38,6 +38,17 @@ export default {
         this.editor.setTheme('ace/theme/monokai');
         this.editor.session.setMode('ace/mode/javascript');
 
+        // If socket exists, set on editor change handler
+        if ( this.socket) {
+            this.socket.on('editor changed', (value) => {
+                // Get current cursor position so that entire text isn't overwritten when changed
+                var cursorPos = this.editor.getCursorPosition();
+                // Set new value
+                this.editor.setValue(value.editorValue,cursorPos);
+                // Reset cursor position
+                this.editor.gotoLine(cursorPos.row + 1,cursorPos.column);
+            })
+        }
     },
     methods: {
         /*********************************************
@@ -51,6 +62,24 @@ export default {
             // Store globally for checking in Practice page
             this.$store.state.result = this.result;
         },
+    },
+    computed: {
+        editorValue() {
+            if (this.editor != null) {
+                return this.editor.getValue();
+            } else {
+                return '';
+            }
+        }
+    },
+    watch: {
+        editorValue(value) {
+            console.log(value);
+            if ( this.roomNumber && this.socket) {
+                // console.log(this.editor.getValue());
+                this.socket.emit('editor changed', {editorValue: this.editor.getValue()});
+            }
+        }
     }
 }
 </script>

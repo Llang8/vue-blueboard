@@ -6,7 +6,7 @@
     </div>
     <div class="content-grid">
         <div class="col1">
-        <editor class="editor-block"></editor>
+        <editor v-bind:roomNumber="roomNumber" v-bind:socket="socket" class="editor-block"></editor>
         </div>
         <div class="col2">
             <div class="videochat"></div>
@@ -47,7 +47,6 @@ export default {
                 this.messages.push(`${msg.user}: ${msg.msg}`);
             });
 
-            this.socket.emit('set username', this.$store.state.username);
         } else {
             this.$router.push({name: 'home'})
             alert('Please login before joining room')
