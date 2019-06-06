@@ -1,9 +1,5 @@
 <template>
 <div>
-    <div class="top-bar">
-        <h1>BlueBoard - Practice Room</h1>
-        <h1><router-link to="/">Home</router-link></h1>
-    </div>
     <div class="content-practice">
         <div class="check-incorrect" v-if='checkResponse'>{{checkResponse}}</div>
         <div class="editor-controls">
@@ -97,29 +93,10 @@ export default {
 </script>
 
 <style>
-.top-bar {
-    display: flex;   
-    align-items: center;
-    justify-content: space-between;
-    padding-left: 10px;
-    background: rgb(87, 73, 112);
-    width: calc(100vw - 10px); /* Calculate width minus padding */
-    height: 50px;
-}
 .content-practice {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.top-bar > h1 {
-    margin: 0;
-    width: 300px !important;
-}
-
-.top-bar > h1 > a {
-    color: white;
-    text-decoration: none;
 }
 
 .prompt {

@@ -1,9 +1,5 @@
 <template>
 <div>
-    <div class="top-bar">
-        <h1>BlueBoard - Room: {{ roomNumber }}</h1>
-        <h1 style="text-align: right;"><router-link to='/'>Home</router-link></h1>
-    </div>
     <div class="content-grid">
         <div class="col1">
         <editor v-bind:roomNumber="roomNumber" v-bind:socket="socket" class="editor-block"></editor>
@@ -78,20 +74,6 @@ export default {
 }
 </script>
 <style>
-.top-bar {
-    display: flex;   
-    align-items: center;
-    padding-left: 10px;
-    background: rgb(87, 73, 112);
-    width: calc(100vw - 10px); /* Calculate width minus padding */
-    height: 50px;
-}
-
-.top-bar > h1 {
-    margin-right: 20px;
-    font-size: 20px;
-}
-
 .content-grid {
     height: calc(100vh - 50px);
     width: 100%;
