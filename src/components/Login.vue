@@ -3,7 +3,7 @@
     <div class="login-content">
         <div v-if="loggingIn">
             <h1>BlueBoard</h1>
-            <ul v-for="error in errors">
+            <ul v-bind:key='error' v-for="error in errors">
                 <li>{{ error }}</li>
             </ul>
             <form  id="login-form" action="">

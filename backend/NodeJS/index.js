@@ -4,10 +4,30 @@ var Room = require('./room');
 /* var allowedOrigins = "http://localhost:* http://127.0.0.1:*";
 var path ='/stomp'; // you need this if you want to connect to something other than the default socket.io path
  */
-const port = 5000;
+const port = 5550;
 
 // Running array of all open rooms
 let rooms = [];
+
+// Add headers
+app.use(function (req, res, next) {
+
+  // Website you wish to allow to connect
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+
+  // Request methods you wish to allow
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+  // Request headers you wish to allow
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+  // Set to true if you need the website to include cookies in the requests sent
+  // to the API (e.g. in case you use sessions)
+  res.setHeader('Access-Control-Allow-Credentials', true);
+
+  // Pass to next layer of middleware
+  next();
+});
 
 var server = app.listen(port, () => {
     console.log('Server running on port: ' + port);
@@ -22,10 +42,13 @@ var server = app.listen(port, () => {
 * to main menu and/or prompt to log in
 ***************************************/
 app.get('/checkExists/:id', function(req, res) {
-  if ( checkAvailable(req.params.id)) {
-    res.send('!exists');
-  } else {
+  if ( checkExists(req.params.id)) {
+    console.log('exists')
     res.send('exists');
+
+  } else {
+    console.log('!exists')
+    res.send('!exists');
   }
 });
 
@@ -35,9 +58,12 @@ app.get('/checkExists/:id', function(req, res) {
 ***************************************/
 app.get('/createRoom/:id', function(req,res) {
   // If id is available create room
-  if ( checkAvailable(req.params.id)) {
+
+  console.log(rooms);
+  if ( !checkExists(req.params.id)) {
     var room = new Room(req.params.id, server);
     rooms.push(room);
+    res.send('Room created');
   } else {
     res.send('Error: Room ID not available');
   }
@@ -50,13 +76,15 @@ app.get('/removeRoom/:id', function(req,res) {
 
 /************************************** 
 * Iterates through all of the rooms open
-* and checks that ID is available.
+* and checks if ID already exists
 **************************************/
-function checkAvailable(id) {
-  rooms.forEach((room) => {
-    if ( room.getId() == id) {
-      return false;
+function checkExists(id) {
+
+  console.log(rooms[0].getId(),id);
+  for( var i = 0; i < rooms.length; i++ ){
+    if(rooms[i].getId() == id) {
+      return true;
     }
-  })
-  return true;
+  }
+  return false;
 }

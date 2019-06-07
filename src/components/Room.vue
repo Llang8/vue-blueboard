@@ -9,7 +9,7 @@
             <div class="videochat"></div>
             <div class="userchat">
                 <div class="messages">
-                    <p class='message' v-for='message in messages'>{{ message }}</p>
+                    <p class='message' v-bind:key='message' v-for='(message) in messages'>{{ message }}</p>
                 </div>
                 <div class='send-messages'>
                     <input type="text" v-model='newMessage'>
@@ -37,7 +37,7 @@ export default {
     },
     created() {
         if ( this.$store.state.user) {
-            this.socket = io(`http://localhost:5000/${this.roomNumber}`, { transport : ['websocket'] });
+            this.socket = io(`http://127.0.0.1:5550/${this.roomNumber}`, { transport : ['websocket'] });
 
             this.socket.on('message', (msg) => {
                 this.messages.push(`${msg.user}: ${msg.msg}`);

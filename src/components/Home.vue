@@ -4,12 +4,16 @@
         <h1>BlueBoard</h1>
         <input type="text" id="room-number" v-model='roomNumber' placeholder="Enter room number...">
         <button @click="joinRoom()">Join Room</button>
+        <button v-if="user" @click="createRoom()">Create Room</button>
+        <p v-else>Login to create a room...</p>   
         <button @click="practice()">Practice Coding</button>
         <button v-if="this.$store.state.user == null" @click="login()">Login</button>
     </div>
 </div>
 </template>
 <script>
+import axios from 'axios';
+
 export default {
     name: 'home',
     data() {
@@ -20,13 +24,32 @@ export default {
     methods: {
         /* Join Room of Room Number */
         joinRoom() {
-            this.$router.push({name:'room', params:{id:this.roomNumber}});
+            axios({url: `http://127.0.0.1:5550/checkExists/${this.roomNumber}`, method:'get', timeout: 8000})
+                .then((data)=> {
+                    console.log(data.data)
+                    if(data.data == 'exists') {
+                        this.$router.push({name:'room', params:{id:this.roomNumber}});
+                    } else {
+                        alert(`This room doesn't exist.`)
+                    }
+                })
         },
         practice() {
             this.$router.push({name:'practice'});
         },
         login() {
             this.$router.push({name:'login'});
+        },
+        createRoom() {
+            axios({url: `http://127.0.0.1:5550/createRoom/${this.roomNumber}`, method:'get', timeout:8000})
+                .then((data)=> {
+                    if(data.data == 'Error: Room ID not available') {
+                        alert('Room already exists, choose a new room.')
+                    } else {
+                        this.$router.push({name:'room', params:{id:this.roomNumber}})
+                    }
+                })
+                .catch(error =>  console.error(error));
         }
     },
     computed: {
