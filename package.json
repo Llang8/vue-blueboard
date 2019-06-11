@@ -12,6 +12,8 @@
   "dependencies": {
     "ace-builds": "^1.4.4",
     "axios": "^0.19.0",
+    "getusermedia": "^2.0.1",
+    "simple-peer": "^9.3.0",
     "socket.io-client": "^2.2.0",
     "vue": "^2.5.11",
     "vue-router": "^3.0.6",

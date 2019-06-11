@@ -2,10 +2,10 @@
 <div id="home">
     <div class="content">
         <h1>BlueBoard</h1>
-        <input type="text" id="room-number" v-model='roomNumber' placeholder="Enter room number...">
-        <button @click="joinRoom()">Join Room</button>
-        <button v-if="user" @click="createRoom()">Create Room</button>
-        <p v-else>Login to create a room...</p>   
+        <input v-if="user !=null" type="text" id="room-number" v-model='roomNumber' placeholder="Enter room number...">
+        <button v-if="user != null" @click="joinRoom()">Join Room</button>
+        <button v-if="user != null" @click="createRoom()">Create Room</button>
+        <p style="color: black;" v-else>Login to create a room...</p>   
         <button @click="practice()">Practice Coding</button>
         <button v-if="this.$store.state.user == null" @click="login()">Login</button>
     </div>

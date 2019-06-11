@@ -9,6 +9,7 @@ from random import choice
 
 @app.route('/addUser/<username>/<email>/<password>/<is_interviewer>', defaults={'first_name': None, 'last_name':None})
 @app.route('/addUser/<username>/<email>/<password>/<first_name>/<last_name>/<is_interviewer>')
+@cross_origin(origin="*",headers=["Content-Type","Authorization"])
 def addUser(username, email, password, first_name, last_name, is_interviewer):
 
     # Convert is_interviewer to boolean
@@ -161,7 +162,6 @@ def loginAdmin():
 def load_user(id):
     return Admin.query.get(int(id))
 
-# TODO: SETUP LOGIN REQUIRED FOR ADMIN FUNCTIONS
 @app.route('/promptForm',methods=['GET','POST'])
 @login_required
 def showPromptForm():

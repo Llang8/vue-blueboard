@@ -1,21 +1,15 @@
 <template>
-<div>
-    <div class="content-grid">
-        <div class="col1">
+<div class="room">
+    <div class="editor-wrapper">
         <editor v-bind:roomNumber="roomNumber" v-bind:socket="socket" class="editor-block"></editor>
+    </div>
+    <div class="userchat">
+        <div class="messages">
+            <p class='message' v-bind:key='message' v-for='(message) in messages'>{{ message }}</p>
         </div>
-        <div class="col2">
-            <div class="videochat"></div>
-            <div class="videochat"></div>
-            <div class="userchat">
-                <div class="messages">
-                    <p class='message' v-bind:key='message' v-for='(message) in messages'>{{ message }}</p>
-                </div>
-                <div class='send-messages'>
-                    <input type="text" v-model='newMessage'>
-                    <button @click="sendMessage()">Send</button>
-                </div>
-            </div>
+        <div class='send-messages'>
+            <input type="text" v-model='newMessage'>
+            <button @click="sendMessage()">Send</button>
         </div>
     </div>
 </div>
@@ -74,26 +68,18 @@ export default {
 }
 </script>
 <style>
-.content-grid {
-    height: calc(100vh - 50px);
-    width: 100%;
-    display: flex;
-}
-
-.col1 {
-    height: 100%;
-    width: 50%;
-}
-
-.col2 {
-    height: 100%;
-    width: 50%;
+.room {
     display: flex;
     flex-direction: column;
+    width: 100vw;
+    align-items: center;
+    min-width: 300px;
 }
 
-.editor-block {
-    height: 100%;   
+.editor-wrapper {
+    width: 80vw;
+    min-width: 300px;
+    height: 60vh;
 }
 
 .userchat {
@@ -114,11 +100,5 @@ export default {
     align-items: center;
     justify-content: center;
     height: 20%;
-}
-
-.videochat {
-    width: auto;
-    height: 40%;
-    background: grey;
 }
 </style>

@@ -88,8 +88,7 @@ export default {
 #editor {
     width: 100%;
     height: 80%;
-    min-height: 150px;
-    max-height: 300px;
+    min-height: 300px;
 }
 
 .editor-break > h1 {
@@ -103,6 +102,7 @@ export default {
 #result {
     width: calc(100% - 20px); /* Get width minus padding */
     height: 15%; /* Set height to 15% of editor box */
+    min-height: 50px;
     padding: 10px; 
     text-align: left;
     background: #272822;
