@@ -18,6 +18,7 @@ app.config.from_object(Config)
 # Initialize db
 db = SQLAlchemy(app)
 
+
 login_manager = LoginManager(app)
 login_manager.login_view = 'loginAdmin'
 
@@ -25,5 +26,6 @@ from routes import *
 
 # Run Server
 if __name__ == "__main__":
+
     # Set debug to false in production
     app.run(debug=True)

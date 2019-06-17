@@ -105,6 +105,7 @@ class Admin(UserMixin, db.Model):
 class UserSession(db.Model):
     __tablename__ = 'user_session'
     id = db.Column(db.Integer, primary_key=True)
+    session_id = db.Column(db.String, nullable=False,unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     expiration_date = db.Column(db.DateTime, nullable=False)
 

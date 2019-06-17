@@ -6,6 +6,7 @@ from models import User, Prompt, Admin, Message, Solution, Room, Creator, UserSe
 from forms import PromptForm, LoginForm
 from random import choice
 from uuid import uuid4
+import datetime
 
 # This is a list of user session id's, this is for TESTING only
 userSessions = []
@@ -40,12 +41,16 @@ def addUser(username, email, password, first_name, last_name, is_interviewer):
 @app.route('/checkSession/<id>', methods=["POST","GET"])
 @cross_origin(origin="*",headers=["Content-Type", "Authorization"])
 def checkSession(id):
-    print(userSessions)
-    for session in userSessions:
-        if str(session['uuid']) == id:
-            user = User.query.filter_by(id=session['user_id']).first()
-            return jsonify(id=user.id,username=user.username,email=user.email,first_name=user.first_name,last_name=user.last_name,is_interviewer=user.is_interviewer,create_date=user.create_date)
-
+    if id == 'undefined':
+        return 'Session not found'
+    
+    
+    user_session = UserSession.query.filter_by(session_id=id).first()
+    # Check that session is not expired
+    if datetime.datetime.now() < user_session.expiration_date:
+        user = User.query.filter_by(id=user_session.user_id).first()
+        return jsonify(id=user.id,username=user.username,email=user.email,first_name=user.first_name,last_name=user.last_name,is_interviewer=user.is_interviewer,create_date=user.create_date)
+    
     return 'Session not found'
 
 @app.route('/delUser')
@@ -91,9 +96,13 @@ def login(email,password):
     try:
         user = User.query.filter_by(email=email).first()
         if user.check_password_hash(password):
-            uuid = uuid4()
-            userSessions.append({"uuid":uuid,"user_id":user.id})
+            uuid = str(uuid4())
             print(uuid)
+            # Set expiration date to one week
+            expiration_date = datetime.datetime.now() + datetime.timedelta(days=7)
+            user_session = UserSession(session_id=uuid,user_id=user.id,expiration_date=expiration_date)
+            db.session.add(user_session)
+            db.session.commit()
             return jsonify(id=user.id,username=user.username,email=user.email,first_name=user.first_name,last_name=user.last_name,is_interviewer=user.is_interviewer,create_date=user.create_date, uuid=uuid)
         else:
             return 'Password Incorrect'
