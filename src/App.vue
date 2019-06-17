@@ -13,10 +13,16 @@
         </h1>
         <!-- Show user notification button and menu button if user logged in -->
         <img v-if="this.$store.state.user != null" @click="showNotifications = !showNotifications" src="http://placehold.it/25x25" alt="Notification">
-        <img v-if="this.$store.state.user != null"  @click="showUserMenu = !showUserMenu" src="./assets/blank-profile-picture.png" alt="Profile">
+        <img id="user-menu-icon" v-if="this.$store.state.user != null"  @click="showUserMenu = !showUserMenu" src="./assets/blank-profile-picture.png" alt="Profile">
+        <div v-if="showNotifications"></div>
       </div>
     </header>
-                     
+    <div v-if="showUserMenu" id="user-dropdown" class="user-dropdown">
+      <ul>
+        <li>Settings</li>
+        <li @click="logout()">Logout</li>
+      </ul>
+    </div>       
     <router-view></router-view>
   </div>
 </template>
@@ -45,6 +51,29 @@ export default {
         }
       })
       .catch(error =>  console.error(error))
+    }
+  },
+  created() {
+
+    // If user menu opened and user clicks off of it,
+    // Close user dropdown menu
+    document.addEventListener('click', (event) => {
+      if(this.$store.state.user != null) {
+        if (!document.getElementById('user-menu-icon').contains(event.target) && 
+              this.showUserMenu) {
+          this.showUserMenu = false;
+        }
+      }
+    });
+  },
+  methods: {
+    logout() {
+      // Set user object to null
+      this.$store.state.user = null;
+      // Delete localStorage session id
+      window.localStorage.removeItem('jwt', null);
+      // Hide user dropdown
+      this.showUserMenu = false;
     }
   }
 }
@@ -111,5 +140,28 @@ header {
 #user-menu > img:hover{
   border: 5px solid rgb(41, 33, 56);
   cursor: pointer;
+}
+
+.user-dropdown {
+  width: 100px;
+  background: rgb(41, 33, 56);
+  position: absolute;
+  right: 25px;
+  text-align: left;
+}
+
+.user-dropdown > ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.user-dropdown > ul > li {
+  padding: 10px 5px;
+  cursor: pointer;
+}
+
+.user-dropdown > ul > li:hover {
+  background: rgb(12, 9, 17);
 }
 </style>
