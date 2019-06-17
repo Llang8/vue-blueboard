@@ -102,3 +102,11 @@ class Admin(UserMixin, db.Model):
     def __repr__(self):
         return '<ADMIN {}'.format(self.id)
 
+class UserSession(db.Model):
+    __tablename__ = 'user_session'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    expiration_date = db.Column(db.DateTime, nullable=False)
+
+    def __repr__(self):
+        return '<SESSION {}'.format(self.id)

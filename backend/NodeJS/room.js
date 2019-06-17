@@ -12,17 +12,6 @@ class Room {
         // Add user to users array on connection
         this.nsp.on('connection', (socket) => {
             console.log('Connected');
-            // Default to anonymous
-            socket.username = 'anonymous';
-
-            // Change username
-            socket.on('set username', (username) => {
-                this.nsp.emit('message', {
-                    'user': 'Server',
-                    'msg': `${socket.username} has changed their name to ${username}`
-                });
-                socket.username = username;
-            })
 
             // Emit message to room
             socket.on('message',(msg) => {
@@ -42,7 +31,7 @@ class Room {
 
             // Emit join message
             this.nsp.emit('message', 
-                { 'user': 'Server', 'msg':`${socket.username} has joined!`}
+                { 'user': 'Server', 'msg':`User has joined!`}
             );
         });
     }

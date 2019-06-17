@@ -18,7 +18,6 @@ app.config.from_object(Config)
 # Initialize db
 db = SQLAlchemy(app)
 
-
 login_manager = LoginManager(app)
 login_manager.login_view = 'loginAdmin'
 

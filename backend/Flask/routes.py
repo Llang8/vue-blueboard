@@ -2,10 +2,13 @@ from app import app,db, login_manager
 from flask_cors import cross_origin
 from flask import request,render_template,redirect,url_for, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
-from models import User, Prompt, Admin, Message, Solution, Room, Creator
+from models import User, Prompt, Admin, Message, Solution, Room, Creator, UserSession
 from forms import PromptForm, LoginForm
 from random import choice
+from uuid import uuid4
 
+# This is a list of user session id's, this is for TESTING only
+userSessions = []
 
 @app.route('/addUser/<username>/<email>/<password>/<is_interviewer>', defaults={'first_name': None, 'last_name':None})
 @app.route('/addUser/<username>/<email>/<password>/<first_name>/<last_name>/<is_interviewer>')
@@ -33,6 +36,17 @@ def addUser(username, email, password, first_name, last_name, is_interviewer):
         db.session.rollback()
         db.session.flush() # for resetting non-commited .add()
         return 'Failed with error: {}'.format(e)    
+
+@app.route('/checkSession/<id>', methods=["POST","GET"])
+@cross_origin(origin="*",headers=["Content-Type", "Authorization"])
+def checkSession(id):
+    print(userSessions)
+    for session in userSessions:
+        if str(session['uuid']) == id:
+            user = User.query.filter_by(id=session['user_id']).first()
+            return jsonify(id=user.id,username=user.username,email=user.email,first_name=user.first_name,last_name=user.last_name,is_interviewer=user.is_interviewer,create_date=user.create_date)
+
+    return 'Session not found'
 
 @app.route('/delUser')
 def delUser():
@@ -77,7 +91,10 @@ def login(email,password):
     try:
         user = User.query.filter_by(email=email).first()
         if user.check_password_hash(password):
-            return jsonify(id=user.id,username=user.username,email=user.email,first_name=user.first_name,last_name=user.last_name,is_interviewer=user.is_interviewer,create_date=user.create_date)
+            uuid = uuid4()
+            userSessions.append({"uuid":uuid,"user_id":user.id})
+            print(uuid)
+            return jsonify(id=user.id,username=user.username,email=user.email,first_name=user.first_name,last_name=user.last_name,is_interviewer=user.is_interviewer,create_date=user.create_date, uuid=uuid)
         else:
             return 'Password Incorrect'
 

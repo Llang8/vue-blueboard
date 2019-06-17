@@ -31,7 +31,7 @@ export default {
     },
     created() {
         if ( this.$store.state.user) {
-            this.socket = io(`http://127.0.0.1:5550/${this.roomNumber}`, { transport : ['websocket'] });
+            this.socket = io(`http://127.0.0.1:5550/${this.roomNumber}`, { transports: ['websocket'] });
 
             this.socket.on('message', (msg) => {
                 this.messages.push(`${msg.user}: ${msg.msg}`);

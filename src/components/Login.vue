@@ -126,6 +126,8 @@ export default {
                 } else {
                     // If response is a User object, reroute to home page and set global user state
                     this.$store.state.user = response.data;
+                    window.localStorage.setItem('jwt',response.data.uuid);
+                    console.log(window.localStorage.getItem('jwt'))
                     this.$router.push({name:'home'})
                 }
             })

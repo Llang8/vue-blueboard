@@ -22,12 +22,29 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'app',
   data() {
     return {
       showUserMenu: false,
       showNotifications: false
+    }
+  },
+  beforeCreate() {
+    // CHECK SESSION FOR ID
+    let token = window.localStorage.getItem('jwt');
+    console.log(token);
+    if( token) {
+      return axios({ url: `http://127.0.0.1:5000/checkSession/${token}`, method:'post', timeout:8000})
+      .then(response => {
+        // If response is a User object, reroute to home page and set global user state
+        if( response.data != 'Session not found') {
+          this.$store.state.user = response.data;
+        }
+      })
+      .catch(error =>  console.error(error))
     }
   }
 }

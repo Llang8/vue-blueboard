@@ -20,10 +20,9 @@ npm run build
 For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
 ## TODO:
-- [ ] Set up Python Backend for allowing users to login and register
-- [ ] Set up database in Postgresql
-- [ ] Connect socket.io to a NodeJS backend to allow users to code and text chat in realtime in separate rooms
-- [ ] Allow authenticated users to create rooms
+- [X] Set up Python Backend for allowing users to login and register
+- [X] Set up database in Postgresql
+- [X] Connect socket.io to a NodeJS backend to allow users to code and text chat in realtime in separate rooms
+- [X] Allow authenticated users to create rooms
 - [ ] Add more prompts to Practice Room
-- [ ] Set up WebRTC to allow users to videochat in rooms 
 - [X] Add difficulty dropdown/selection to practice room.
