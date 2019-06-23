@@ -1,7 +1,6 @@
 # Vue BlueBoard
 
 > A Vue.js project for remotely conducting JavaScript whiteboard interviews. Allows interviewers to join a room with a potential JavaScript developer and give them prompts to workthrough. The app also includes a video chat function when in a room with another user.
-### This app is not finished.
 
 
 ## Build Setup
