@@ -3,7 +3,7 @@ var io = require('socket.io-client')
 export class SocketHandler {
 
     constructor() {
-        var socket = io('http://localhost:3000');
+        var socket = io('https://blueboard-node.herokuapp.com/');
 
         socket.on('connect', connectEvent(socket));
 

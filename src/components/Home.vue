@@ -24,7 +24,7 @@ export default {
     methods: {
         /* Join Room of Room Number */
         joinRoom() {
-            axios({url: `http://127.0.0.1:5550/checkExists/${this.roomNumber}`, method:'get', timeout: 8000})
+            axios({url: `https://blueboard-node.herokuapp.com/checkExists/${this.roomNumber}`, method:'get', timeout: 8000})
                 .then((data)=> {
                     console.log(data.data)
                     if(data.data == 'exists') {
@@ -41,7 +41,7 @@ export default {
             this.$router.push({name:'login'});
         },
         createRoom() {
-            axios({url: `http://127.0.0.1:5550/createRoom/${this.roomNumber}`, method:'get', timeout:8000})
+            axios({url: `https://blueboard-node.herokuapp.com/createRoom/${this.roomNumber}`, method:'get', timeout:8000})
                 .then((data)=> {
                     if(data.data == 'Error: Room ID not available') {
                         alert('Room already exists, choose a new room.')
