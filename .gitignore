@@ -14,4 +14,4 @@ yarn-error.log
 backend/Flask/blueboard-env/
 backend/Flask/blueboard-flask/
 backend/Flask/config.py
-backend/Flask/Data-env
+backend/Flask/Data-env/
