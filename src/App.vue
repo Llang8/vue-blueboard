@@ -43,7 +43,7 @@ export default {
     let token = window.localStorage.getItem('jwt');
     console.log(token);
     if( token) {
-      return axios({ url: `https://blueboard-flask-ll.herokuapp.com/checkSession/${token}`, method:'post', timeout:8000})
+      return axios({ url: `http://localhost:5000/checkSession/${token}`, method:'post', timeout:8000})
       .then(response => {
         // If response is a User object, reroute to home page and set global user state
         if( response.data != 'Session not found') {

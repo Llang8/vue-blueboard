@@ -42,6 +42,9 @@ export default {
             alert('Please login before joining room')
         }
     },
+    destroyed() {
+        this.socket.close();
+    },
     methods: {
         sendMessage() {
             if ( this.socket != '') {
