@@ -56,7 +56,7 @@ export default {
         this.editor.on('change', () => {
             if ( this.socket && !this.stopLoop) {
                 console.log(this.editor.getValue());
-                //this.socket.emit('editor changed', {editorValue: this.editor.getValue()});
+                this.socket.emit('editor changed', {editorValue: this.editor.getValue()});
             } else {
                 this.stopLoop = !this.stopLoop;
             }
