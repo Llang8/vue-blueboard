@@ -48,13 +48,11 @@ export default {
                 this.editor.setValue(value.editorValue,cursorPos);
                 // Reset cursor position
                 this.editor.gotoLine(cursorPos.row + 1,cursorPos.column);
-
-                this.stopLoop = true;
             })
         }
 
         this.editor.on('change', () => {
-            if ( this.socket && !this.stopLoop) {
+            if ( this.socket) {
                 console.log(this.editor.getValue());
                 this.socket.emit('editor changed', {editorValue: this.editor.getValue()});
             } else {
