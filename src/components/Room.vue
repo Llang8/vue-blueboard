@@ -33,7 +33,7 @@ export default {
     created() {
         if ( this.$store.state.user) {
             console.log(this.roomNumber);
-            this.socket = io(`${config.nodeEndpoint}/${this.roomNumber}`, { transports: ['websocket'] });
+            this.socket = io.connect(`${config.nodeEndpoint}${this.roomNumber}`, { transports: ['websocket'] });
             console.log(this.socket)
             this.socket.on('message', (msg) => {
                 this.messages.push(`${msg.user}: ${msg.msg}`);
