@@ -78,7 +78,6 @@ export default {
         var ctx = this;
         this.promptHandler.getPrompt(this.difficulty).then(res => {
             // Reset editor value, switch escaped newlines to regular new lines
-            console.log(res);
             console.log(JSON.stringify(res));
             var editor_value = JSON.stringify(res.editor_value)
             res.editor_value = editor_value.replace(/\\n/g, '\n').replace(/\\/g, '')
