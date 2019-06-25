@@ -49,6 +49,11 @@ export default {
                 this.editor.gotoLine(cursorPos.row + 1,cursorPos.column);
             })
         }
+
+        if ( this.roomNumber && this.socket) {
+            // console.log(this.editor.getValue());
+            this.socket.emit('editor changed', {editorValue: this.editor.getValue()});
+        }
     },
     methods: {
         /*********************************************

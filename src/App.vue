@@ -12,7 +12,6 @@
           <router-link to='/'>Home</router-link>
         </h1>
         <!-- Show user notification button and menu button if user logged in -->
-        <img v-if="this.$store.state.user != null" @click="showNotifications = !showNotifications" src="http://placehold.it/25x25" alt="Notification">
         <img id="user-menu-icon" v-if="this.$store.state.user != null"  @click="showUserMenu = !showUserMenu" src="./assets/blank-profile-picture.png" alt="Profile">
         <div v-if="showNotifications"></div>
       </div>
