@@ -1,5 +1,5 @@
 var axios = require('axios');
-var config = require('../config');
+var config = require('../config.js');
 
 export class PromptHandler {
     
