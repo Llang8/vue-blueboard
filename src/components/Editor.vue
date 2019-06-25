@@ -52,6 +52,10 @@ export default {
                 // Reset cursor position
                 this.editor.gotoLine(cursorPos.row + 1,cursorPos.column);
             })
+
+            this.socket.on('editor run', () => {
+                this.runCode();
+            })
         }
 
         this.editor.on('change', () => {

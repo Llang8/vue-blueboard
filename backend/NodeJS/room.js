@@ -14,7 +14,7 @@ class Room {
 
             // Emit message to room
             socket.on('message',(msg) => {
-                socket.emit('message', {
+                this.nsp.emit('message', {
                     'user': msg.user,
                     'msg': msg.msg
                 })
@@ -24,13 +24,17 @@ class Room {
                 console.log('EDITOR CHANGED');
                 socket.broadcast.emit('editor changed', {editorValue: value.editorValue});
             })
+
+            socket.on('editor run', () => {
+                socket.broadcast.emit('editor run');
+            })
             // TODO: Remove user from server
             socket.on('disconnect', () => {
                 console.log('DISCONNECT');
             })
 
             // Emit join message
-            socket.emit('message', 
+            this.nsp.emit('message', 
                 { 'user': 'Server', 'msg':`User has joined!`}
             );
         });
