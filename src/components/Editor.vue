@@ -50,10 +50,13 @@ export default {
             })
         }
 
-        if ( this.roomNumber && this.socket) {
-            // console.log(this.editor.getValue());
-            this.socket.emit('editor changed', {editorValue: this.editor.getValue()});
-        }
+        this.editor.on('change', () => {
+            if ( this.socket) {
+                console.log(this.editor.getValue());
+                this.socket.emit('editor changed', {editorValue: this.editor.getValue()});
+            }
+        });
+        
     },
     methods: {
         /*********************************************
