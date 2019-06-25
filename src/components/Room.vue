@@ -2,14 +2,15 @@
 <div class="room">
     <div class="editor-wrapper">
         <editor v-bind:roomNumber="roomNumber" v-bind:socket="socket" class="editor-block"></editor>
-    </div>
-    <div class="userchat">
-        <div class="messages">
-            <p class='message' v-bind:key='message' v-for='(message) in messages'>{{ message }}</p>
-        </div>
-        <div class='send-messages'>
-            <input type="text" v-model='newMessage'>
-            <button @click="sendMessage()">Send</button>
+        <hr>
+        <div class="userchat">
+            <div class="messages">
+                <p class='message' v-bind:key='message' v-for='(message) in messages'>{{ message }}</p>
+            </div>
+            <div class='send-messages'>
+                <input type="text" v-model='newMessage'>
+                <button @click="sendMessage()">Send</button>
+            </div>
         </div>
     </div>
 </div>
