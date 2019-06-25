@@ -78,13 +78,13 @@ export default {
         }
     },
     watch: {
-        editorValue(value) {
+/*         editorValue(value) {
             console.log(value);
             if ( this.roomNumber && this.socket) {
                 // console.log(this.editor.getValue());
                 this.socket.emit('editor changed', {editorValue: this.editor.getValue()});
             }
-        }
+        } */
     }
 }
 </script>
