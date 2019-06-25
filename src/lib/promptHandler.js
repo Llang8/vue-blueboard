@@ -13,6 +13,7 @@ export class PromptHandler {
     *  hit API and return a prompt from a database.
     */
     getPrompt(difficulty) {
+        console.log(`${config.flaskEndpoint}getRandomPrompt/${difficulty}`)
         return axios({ url: `${config.flaskEndpoint}getRandomPrompt/${difficulty}`, method:'get', timeout:8000})
             .then(response => response.data)
             .catch(error =>  console.error(error))
