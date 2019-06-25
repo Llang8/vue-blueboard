@@ -13,7 +13,7 @@
 </template>
 <script>
 import axios from 'axios';
-import config from '../config.js';
+import config from '../config';
 
 export default {
     name: 'home',
