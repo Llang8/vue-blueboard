@@ -22,7 +22,7 @@ class Room {
 
             socket.on('editor changed',(value) => {
                 console.log('EDITOR CHANGED');
-                this.nsp.emit('editor changed', {editorValue: value.editorValue});
+                this.nsp.broadcast.emit('editor changed', {editorValue: value.editorValue});
             })
             // TODO: Remove user from server
             socket.on('disconnect', () => {
