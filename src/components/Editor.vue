@@ -52,17 +52,18 @@ export default {
                 // Set new value
                 this.editor.setValue(value.editorValue,cursorPos);
 
+
+                this.setValue = false;
                 // Reset cursor position
                 this.editor.gotoLine(cursorPos.row + 1,cursorPos.column);
             })
         }
 
         this.editor.on('change', () => {
+
+            console.log(this.setValue);
             if ( this.socket && !this.setValue) {
-                console.log(this.editor.getValue());
                 this.socket.emit('editor changed', {editorValue: this.editor.getValue()});
-            } else {
-                this.setValue = false;
             }
         });
 
