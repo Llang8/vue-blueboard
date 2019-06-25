@@ -53,9 +53,9 @@ export default {
                 this.editor.gotoLine(cursorPos.row + 1,cursorPos.column);
             })
 
-            this.socket.on('runcode', () => {
+/*             this.socket.on('runcode', () => {
                 this.runCode();
-            })
+            }) */
         }
 
         this.editor.on('change', () => {

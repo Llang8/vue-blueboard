@@ -25,9 +25,9 @@ class Room {
                 socket.broadcast.emit('editor changed', {editorValue: value.editorValue});
             })
 
-            socket.on('runcode', () => {
+/*             socket.on('runcode', () => {
                 socket.broadcast.emit('runcode');
-            })
+            }) */
             // TODO: Remove user from server
             socket.on('disconnect', () => {
                 console.log('DISCONNECT');
