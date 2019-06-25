@@ -25,7 +25,8 @@ export default {
         return {
             editor: null,
             handler: new AceHandler(),
-            result: ''
+            result: '',
+            stopLoop: false
         }
     },
     /************************************************************* 
@@ -47,16 +48,20 @@ export default {
                 this.editor.setValue(value.editorValue,cursorPos);
                 // Reset cursor position
                 this.editor.gotoLine(cursorPos.row + 1,cursorPos.column);
+
+                this.stopLoop = true;
             })
         }
 
         this.editor.on('change', () => {
-            if ( this.socket) {
+            if ( this.socket && !this.stopLoop) {
                 console.log(this.editor.getValue());
                 this.socket.emit('editor changed', {editorValue: this.editor.getValue()});
+            } else {
+                this.stopLoop = !this.stopLoop;
             }
         });
-        
+
     },
     methods: {
         /*********************************************
