@@ -40,6 +40,7 @@ export default {
         this.editor = ace.edit('editor');
         this.editor.setTheme('ace/theme/monokai');
         this.editor.session.setMode('ace/mode/javascript');
+        this.editor.gotoLine(3,0);
 
         // If socket exists, set on editor change handler
         if ( this.socket) {
