@@ -1,6 +1,8 @@
 var app = require('express')();
 var Room = require('./room');
+var socket = require('socket.io');
 
+var io;
 /* var allowedOrigins = "http://localhost:* http://127.0.0.1:*";
 var path ='/stomp'; // you need this if you want to connect to something other than the default socket.io path
  */
@@ -27,7 +29,8 @@ app.use(function (req, res, next) {
 
 var server = app.listen(process.env.PORT || 5000, () => {
     console.log('Server running on port: ' + port);
-    var room = new Room('1', server);
+    io = socket(server)
+    var room = new Room('1', io);
     rooms.push(room);
 });
 
@@ -57,7 +60,7 @@ app.get('/createRoom/:id', function(req,res) {
 
   console.log(rooms);
   if ( !checkExists(req.params.id)) {
-    var room = new Room(req.params.id, server);
+    var room = new Room(req.params.id, io);
     rooms.push(room);
     res.send('Room created');
   } else {
