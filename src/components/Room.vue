@@ -20,6 +20,7 @@ import Editor from './Editor.vue';
 
 // Import socket.io
 import io from 'socket.io-client';
+import config from '../config.js';
 
 export default {
     data() {
@@ -31,7 +32,7 @@ export default {
     },
     created() {
         if ( this.$store.state.user) {
-            this.socket = io(`https://blueboard-node.herokuapp.com/${this.roomNumber}`, { transports: ['websocket'] });
+            this.socket = io(`${config.nodeEndpoint}/${this.roomNumber}`, { transports: ['websocket'] });
 
             this.socket.on('message', (msg) => {
                 this.messages.push(`${msg.user}: ${msg.msg}`);

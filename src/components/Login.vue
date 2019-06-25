@@ -44,6 +44,7 @@
 </template>
 <script>
 import axios from 'axios';
+import config from '../config';
 
 export default {
     data() {
@@ -118,7 +119,7 @@ export default {
             console.log(this.errors)
         },
         submitLogin() {
-            return axios({ url: `http://heroku-flask-ll.herokuapp.com/login/${this.email}/${this.password}`, method:'get', timeout:8000})
+            return axios({ url: `${config.flaskEndpoint}login/${this.email}/${this.password}`, method:'get', timeout:8000})
             .then(response => {
                 console.log(response.data);
                 if(response.data == 'Password Incorrect') {
@@ -133,7 +134,7 @@ export default {
             .catch(error =>  console.error(error))
         },
         submitRegister() {
-            return axios({ url: `http://heroku-flask-ll.herokuapp.com/addUser/${this.username}`, method:'get', timeout:8000})
+            return axios({ url: `${config.flaskEndpoint}addUser/${this.username}`, method:'get', timeout:8000})
             .then(response => {
                 console.log(response.data);
                 if(response.data == 'Password Incorrect') {

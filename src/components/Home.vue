@@ -13,6 +13,7 @@
 </template>
 <script>
 import axios from 'axios';
+import config from '../config.js';
 
 export default {
     name: 'home',
@@ -24,7 +25,7 @@ export default {
     methods: {
         /* Join Room of Room Number */
         joinRoom() {
-            axios({url: `https://blueboard-node.herokuapp.com/checkExists/${this.roomNumber}`, method:'get', timeout: 8000})
+            axios({url: `${config.nodeEndpoint}checkExists/${this.roomNumber}`, method:'get', timeout: 8000})
                 .then((data)=> {
                     console.log(data.data)
                     if(data.data == 'exists') {
@@ -41,7 +42,7 @@ export default {
             this.$router.push({name:'login'});
         },
         createRoom() {
-            axios({url: `http://blueboard-node.herokuapp.com/createRoom/${this.roomNumber}`, method:'get', timeout:8000})
+            axios({url: `${config.nodeEndpoint}createRoom/${this.roomNumber}`, method:'get', timeout:8000})
                 .then((data)=> {
                     if(data.data == 'Error: Room ID not available') {
                         alert('Room already exists, choose a new room.')

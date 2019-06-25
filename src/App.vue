@@ -29,6 +29,7 @@
 
 <script>
 import axios from 'axios';
+import config from '../config.js';
 
 export default {
   name: 'app',
@@ -43,7 +44,7 @@ export default {
     let token = window.localStorage.getItem('jwt');
     console.log(token);
     if( token) {
-      return axios({ url: `http://heroku-flask-ll.herokuapp.com/checkSession/${token}`, method:'post', timeout:8000})
+      return axios({ url: `${config.flaskEndpoint}checkSession/${token}`, method:'post', timeout:8000})
       .then(response => {
         // If response is a User object, reroute to home page and set global user state
         if( response.data != 'Session not found') {
