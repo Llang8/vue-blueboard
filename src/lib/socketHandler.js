@@ -1,9 +1,10 @@
 var io = require('socket.io-client')
+var config = require('../config');
 
 export class SocketHandler {
 
     constructor() {
-        var socket = io('http://localhost:5500/');
+        var socket = io(`${config.nodeEndpoint}`);
 
         socket.on('connect', connectEvent(socket));
 

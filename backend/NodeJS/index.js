@@ -75,8 +75,6 @@ app.get('/removeRoom/:id', function(req,res) {
 * and checks if ID already exists
 **************************************/
 function checkExists(id) {
-
-  console.log(rooms[0].getId(),id);
   for( var i = 0; i < rooms.length; i++ ){
     if(rooms[i].getId() == id) {
       return true;
