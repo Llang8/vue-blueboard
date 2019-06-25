@@ -41,7 +41,7 @@ export default {
             this.$router.push({name:'login'});
         },
         createRoom() {
-            axios({url: `http://localhost:5500/createRoom/${this.roomNumber}`, method:'get', timeout:8000})
+            axios({url: `http://blueboard-node.herokuapp.com/createRoom/${this.roomNumber}`, method:'get', timeout:8000})
                 .then((data)=> {
                     if(data.data == 'Error: Room ID not available') {
                         alert('Room already exists, choose a new room.')
