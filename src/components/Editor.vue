@@ -1,17 +1,17 @@
 <template>
-<div>
-    <div id="editor">// Enter Code Here, output should be set to a variable called result 
+<div class="editor-flex">
+    <div id="editor">// Enter Code Here 
 // LANGUAGE IS JAVASCRIPT 
-<span v-if='prompt'>{{ prompt.editor_value }}</span>
-    </div>
-    <div id="editor-break">
-        <h1>Output:</h1>
-        <button @click="runCode()">Run Code</button>
-    </div>
-    <div id="result">
-        <!-- If result is valid print result, else print error -->
-        <span  v-if="result !== 'undefined'">{{ result }}</span>
-        <span v-else>Error: result is undefined, make sure to save your result in variable result</span>
+        <span v-if='prompt'>{{ prompt.editor_value }}</span></div>
+    <div id="shell">
+      <div class="shell-content">
+        <p>Interactive JavaScript Shell</p>
+      </div>
+      <div class="input-line"><span style="font-size: 10px;">></span>
+        <form class="command-form" v-on:submit.prevent="runCommand()">
+          <input v-model="shellInput" type="text" >
+        </form>
+      </div>
     </div>
 </div>
 </template>
@@ -26,9 +26,14 @@ export default {
     data () {
         return {
             editor: null,
-            handler: new AceHandler(),
+            aceHandler: null,
             result: '',
-            setValue: false
+            shellInput: '',
+            setValue: false,
+            commands: ['help - see a list of commands', 
+                'random - returns a random float between 0 and 1', 
+                'clear - clears shell',
+                "run VARIABLES - runs all code in the editor and prints the value of the variable names past"]
         }
     },
     /************************************************************* 
@@ -41,6 +46,8 @@ export default {
         this.editor.setTheme('ace/theme/monokai');
         this.editor.session.setMode('ace/mode/javascript');
         this.editor.gotoLine(3,0);
+
+        this.aceHandler = new AceHandler();
 
         // If socket exists, set on editor change handler
         if ( this.socket) {
@@ -80,66 +87,129 @@ export default {
             // Store globally for checking in Practice page
             this.$store.state.result = this.result;
         },
-    },
-    computed: {
-        editorValue() {
-            if (this.editor != null) {
-                return this.editor.getValue();
-            } else {
-                return '';
+        runCommand() {
+            var command = this.shellInput.split(" ")[0];
+
+            var par = document.createElement('p')
+            par.appendChild(document.createTextNode('> ' + this.shellInput));
+            par.style = 'input';
+            document.getElementsByClassName('shell-content')[0].appendChild(par);
+
+            if( command.toLowerCase() === 'help') {
+                this.commands.forEach((command) => {
+                this.printOutput(command);
+                });
+            } else if( command.toLowerCase() === 'clear') {
+                document.getElementsByClassName('shell-content')[0].innerHTML = '<p>Shell content cleared</p>'
+            } else if( command.toLowerCase() === 'random') {
+                this.printOutput(Math.random())
+            } else if( command.toLowerCase() === 'run') {
+                var args = this.shellInput.split(" ").splice(1);
+                if(args.length == 0) {
+                    args = ['result']
+                }
+                this.aceHandler.runCode(this.editor.getValue(), args).forEach((result) => {
+                    this.printOutput(result);     
+                });
+            } else if( this.shellInput.includes('(') && this.shellInput.includes(')')) {
+                var functionName = this.shellInput.split('(')[0];
+                var functionArgs = this.shellInput.split('(')[1];
+                functionArgs = functionArgs.substring(0,functionArgs.length-1).split(",");
+                // Convert to correct variable type
+                functionArgs = functionArgs.map((arg) => {
+                arg = arg.trim();
+                
+                // If string remove quotes
+                if(arg.charAt(0) == '"' || arg.charAt(arg.length-1) == "'") {
+                    return arg.substring(1,arg.length-1);
+                
+                // If number param convert
+                } else if (arg.charAt(0) != "{" ) {
+                    return parseInt(arg);
+                } 
+                })
+
+                var result = this.aceHandler.runFunction(this.editor.getValue(), functionName, functionArgs);
+                this.printOutput(result);
+            } 
+            else {
+                this.printOutput("Error: Command Not Found. Type 'help' for a list of commands.");
             }
+
+            // Clear shellInput
+            this.shellInput = '';
+
+            // Scroll shell with data
+            document.getElementById('shell').scrollTop = document.getElementById('shell').scrollHeight;
+        },
+        printOutput(str) {
+            var par = document.createElement('p')
+            par.appendChild(document.createTextNode(str));
+            par.className = 'output';
+            document.getElementsByClassName('shell-content')[0].appendChild(par); 
         }
-    },
-    watch: {
-/*         editorValue(value) {
-            console.log(value);
-            if ( this.roomNumber && this.socket) {
-                // console.log(this.editor.getValue());
-                this.socket.emit('editor changed', {editorValue: this.editor.getValue()});
-            }
-        } */
     }
 }
 </script>
 
 <style>
-#editor {
-    width: 100%;
-    height: 80%;
-    min-height: 300px;
-}
 
-.editor-break > h1 {
-    margin: 0;
-    text-align: left;
-    width: calc(100% - 20px); /* Get width minus the padding */
-    font-size: 20px;
-    padding: 10px;
-    color: white;
-}
-#result {
-    width: calc(100% - 20px); /* Get width minus padding */
-    height: 15%; /* Set height to 15% of editor box */
-    min-height: 50px;
-    padding: 10px; 
-    text-align: left;
-    background: #272822;
-    color: white;
-    overflow-y: auto;
-}
-
-#editor-break {
+.editor-flex {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px 10px;
-    background: #272822;
-    border-bottom: 1px solid #393a33;
+    height: 100%;
 }
 
-#editor-break > button {
-    width: 100px;
-    height: 25px;
+#editor {
+    width: 60%;
+    height: 100%;
+    min-height: 500px;
+    font-size: 18px;
+}
+
+#shell {
+    font-family: 'sans-serif';
+    background: rgb(50,50,50);
+    color: white;
+    padding: 25px;
+    height: calc(100% - 50px);
+    min-height: 450px;
+    width: calc(40% - 50px);
+    overflow-y: auto;
+    text-align: left;
+}
+
+.command-form {
+    display:inline;
+}
+
+.command-form > input {
+    background: rgba(0,0,0,0);
+    border: 0;
+    color: white;
+    margin: 0;
+    width: 80%;
+    padding: 5px;
+}
+
+.output {
+    padding-left: 10px;
+    color: rgb(200,200,200);
+    margin: 5px;
+}
+
+@media screen and (max-width: 800px) {
+    .editor-flex {
+        flex-direction: column;
+    }
+
+    #editor {
+        width: 100%;
+    }
+
+    .result-wrapper {
+        width: 100%;
+        height: 25%;
+    }
 }
 
 </style>

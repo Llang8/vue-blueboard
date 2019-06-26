@@ -1,21 +1,21 @@
 <template>
 <div>
     <div class="content-practice">
-        <div class="check-incorrect" v-if='checkResponse'>{{checkResponse}}</div>
-        <div class="editor-controls">
-            <select v-model="difficulty" id="practice-difficulty">
-                <option value="1">Easiest</option>
-                <option value="2">Easy</option>
-                <option value="3">Medium</option>
-                <option value="4">Hard</option>
-                <option value="5">Hardest</option>
-            </select>
-            <button @click="newPrompt()">New Prompt</button>
-            <button @click="checkResult()">Check</button>
-        </div>
         <div class="prompt" v-if="prompt">
             <h1>Prompt:</h1>
             <p>{{ prompt.body }}</p>
+            <div class="check-incorrect" v-if='checkResponse'>{{checkResponse}}</div>
+            <div class="editor-controls">
+                <select v-model="difficulty" id="practice-difficulty">
+                    <option value="1">Easiest</option>
+                    <option value="2">Easy</option>
+                    <option value="3">Medium</option>
+                    <option value="4">Hard</option>
+                    <option value="5">Hardest</option>
+                </select>
+                <button @click="newPrompt()">New Prompt</button>
+                <button @click="checkResult()">Check</button>
+            </div>
             <!-- Set v-bind prompt to pass in prompt, set key to prompt.name so that if name changes editor updates values -->
             <editor v-bind:prompt="prompt" :key="prompt.id" class="editor-practice"></editor>
         </div>
@@ -102,8 +102,7 @@ export default {
 .prompt {
     background: #272822;
     min-height: 50px;
-    width: 80%;
-    min-width: 400px;
+    width: 100%;
     border-bottom: 1px solid #393a33;
 }
 
@@ -114,7 +113,6 @@ export default {
 .editor-practice {
     width: 100%;
     min-width: 400px;
-    height: 70vh;
     min-height: 400px;
 }
 </style>

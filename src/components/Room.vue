@@ -2,15 +2,14 @@
 <div class="room">
     <div class="editor-wrapper">
         <editor v-bind:roomNumber="roomNumber" v-bind:socket="socket" class="editor-block"></editor>
-        <hr>
-        <div class="userchat">
-            <div class="messages">
-                <p class='message' v-bind:key='message' v-for='(message) in messages'>{{ message }}</p>
-            </div>
-            <div class='send-messages'>
-                <input type="text" v-model='newMessage'>
-                <button @click="sendMessage()">Send</button>
-            </div>
+    </div>
+    <div class="userchat">
+        <div class="messages">
+            <p class='message' v-bind:key='message' v-for='(message) in messages'>{{ message }}</p>
+        </div>
+        <div class='send-messages'>
+            <input type="text" v-model='newMessage'>
+            <button @click="sendMessage()">Send</button>
         </div>
     </div>
 </div>
@@ -83,14 +82,14 @@ export default {
 }
 
 .editor-wrapper {
-    width: 80vw;
+    width: 100vw;
     min-width: 300px;
-    height: 60vh;
+    height: 80vh;
 }
 
 .userchat {
-    width: 100%;
-    height: 200px;
+    width: 100vw;
+    height: calc(15vh);
     background: #272822;
 }
 
@@ -98,7 +97,6 @@ export default {
     height: 80%;
     overflow-y: auto;
     text-align: left;
-    padding: 0px 20px;
 }
 
 .send-messages {
