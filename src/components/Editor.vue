@@ -3,6 +3,7 @@
     <div id="editor">// Enter Code Here 
 // LANGUAGE IS JAVASCRIPT 
         <span v-if='prompt'>{{ prompt.editor_value }}</span></div>
+    <button class="editor-run" @click="runButton()">Run Code</button>
     <div id="shell">
       <div class="shell-content">
         <p>Interactive JavaScript Shell - Type 'help' for a list of commands</p>
@@ -88,6 +89,10 @@ export default {
             // Store globally for checking in Practice page
             this.$store.state.result = this.result;
         },
+        runButton() {
+            this.shellInput = 'run'
+            this.runCommand();
+        },
         runCommand() {
             var command = this.shellInput.split(" ")[0];
 
@@ -162,6 +167,7 @@ export default {
 .editor-flex {
     display: flex;
     height: 100%;
+    position: relative;
 }
 
 #editor {
@@ -200,6 +206,15 @@ export default {
     padding-left: 10px;
     color: rgb(200,200,200);
     margin: 5px;
+}
+
+
+.editor-run {
+    position: absolute;
+    height: 25px;
+    width: 100px;
+    right: 45%;
+    bottom: 20px;
 }
 
 @media screen and (max-width: 800px) {
