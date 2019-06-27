@@ -56,7 +56,7 @@ export default {
             confirmPassword: null,
             firstName: '',
             lastName: '',
-            isIterviewer: false,
+            isInterviewer: false,
             rememberMe: false,
             loggingIn: true
         }
@@ -108,21 +108,23 @@ export default {
 
             if(!this.password) {
                 this.errors.push('Password Required')
-            } else if(this.password != this.checkPassword) {
+            } else if(this.password != this.confirmPassword) {
+                console.log(this.password, this.confirmPassword)
                 this.errors.push('Passwords do not match.')
             }
 
             if(!this.errors.length) {
-                this.submitLogin()
+                this.submitRegister()
             }
 
             console.log(this.errors)
         },
         submitLogin() {
-            return axios({ url: `${config.flaskEndpoint}login`,data: {
+            var user = {
                 email: this.email,
                 password: this.password
-            }, method:'post', timeout:8000})
+            }
+            return axios({ url: `${config.flaskEndpoint}login`,data: user, method:'post', timeout:8000})
             .then(response => {
                 console.log(response.data);
                 if(response.data == 'Password Incorrect') {
@@ -137,16 +139,17 @@ export default {
             .catch(error =>  console.error(error))
         },
         submitRegister() {
-            return axios({ url: `${config.flaskEndpoint}addUser/${this.username}`, method:'post', timeout:8000})
+            var user = {
+                email: this.email,
+                password: this.password,
+                username: this.username,
+                first_name: this.firstName,
+                last_name: this.lastName,
+                is_interviewer: this.isInterviewer
+            }
+            return axios({ url: `${config.flaskEndpoint}addUser`, data: user, method:'post', timeout:8000})
             .then(response => {
-                console.log(response.data);
-                if(response.data == 'Password Incorrect') {
-                    this.errors.push('Email or password incorrect')
-                } else {
-                    // If response is a User object, reroute to home page and set global user state
-                    this.$store.state.user = response.data;
-                    this.$router.push({name:'home'})
-                }
+                this.loggingIn = true;
             })
             .catch(error =>  console.error(error))
         },
