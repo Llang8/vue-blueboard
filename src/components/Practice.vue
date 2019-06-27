@@ -2,19 +2,21 @@
 <div>
     <div class="content-practice">
         <div class="prompt" v-if="prompt">
-            <h1>Prompt:</h1>
-            <p>{{ prompt.body }}</p>
-            <div class="check-incorrect" v-if='checkResponse'>{{checkResponse}}</div>
-            <div class="editor-controls">
-                <select v-model="difficulty" id="practice-difficulty">
-                    <option value="1">Easiest</option>
-                    <option value="2">Easy</option>
-                    <option value="3">Medium</option>
-                    <option value="4">Hard</option>
-                    <option value="5">Hardest</option>
-                </select>
-                <button @click="newPrompt()">New Prompt</button>
-                <button @click="checkResult()">Check</button>
+            <div class="prompt-content">
+                <h1>Prompt:</h1>
+                <p>{{ prompt.body }}</p>
+                <div class="check-incorrect" v-if='checkResponse'>{{checkResponse}}</div>
+                <div class="editor-controls">
+                    <select v-model="difficulty" id="practice-difficulty">
+                        <option value="1">Easiest</option>
+                        <option value="2">Easy</option>
+                        <option value="3">Medium</option>
+                        <option value="4">Hard</option>
+                        <option value="5">Hardest</option>
+                    </select>
+                    <button @click="newPrompt()">New Prompt</button>
+                    <button @click="checkResult()">Check</button>
+                </div>
             </div>
             <!-- Set v-bind prompt to pass in prompt, set key to prompt.name so that if name changes editor updates values -->
             <editor v-bind:prompt="prompt" :key="prompt.id" class="editor-practice"></editor>
@@ -93,26 +95,20 @@ export default {
 </script>
 
 <style>
-.content-practice {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
 .prompt {
     background: #272822;
-    min-height: 50px;
+    height: calc(100vh - 55px);
     width: 100%;
     border-bottom: 1px solid #393a33;
+    overflow-x: hidden;
 }
 
-.editor-controls {
-    margin: 10px;
+.prompt-content {
+    overflow-y: auto;
 }
 
 .editor-practice {
-    width: 100%;
-    min-width: 400px;
-    min-height: 400px;
+    height: 85%;
+    min-height: 500px;
 }
 </style>

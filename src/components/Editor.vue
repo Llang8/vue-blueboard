@@ -166,13 +166,11 @@ export default {
 
 .editor-flex {
     display: flex;
-    height: 100%;
     position: relative;
 }
 
 #editor {
     width: 60%;
-    height: 100%;
     min-height: 500px;
     font-size: 18px;
 }

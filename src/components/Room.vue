@@ -87,6 +87,10 @@ export default {
     height: calc(80vh - 1px);
 }
 
+.editor-block {
+    height: 100%;
+}
+
 .userchat {
     width: calc(100%);
     height: calc(15vh);
