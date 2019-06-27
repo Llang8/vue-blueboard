@@ -11,11 +11,23 @@ import datetime
 # This is a list of user session id's, this is for TESTING only
 userSessions = []
 
-@app.route('/addUser/<username>/<email>/<password>/<is_interviewer>', defaults={'first_name': None, 'last_name':None})
-@app.route('/addUser/<username>/<email>/<password>/<first_name>/<last_name>/<is_interviewer>')
+@app.route('/addUser')
 @cross_origin(origin="*",headers=["Content-Type","Authorization"])
-def addUser(username, email, password, first_name, last_name, is_interviewer):
+def addUser():
 
+    try:
+        username = request.args.get('username')
+        password = request.args.get('password')
+        email = request.args.get('email')
+        is_interviewer = request.args.get('is_interviewer')
+    except Exception as e:
+        return 'Failed with error: {}'.format(e)    
+
+    try:
+        first_name = request.args.get('first_name')
+        last_name = request.args.get('last_name')
+    except Exception as e:
+        pass
     # Convert is_interviewer to boolean
     if is_interviewer.lower() == 'true' or is_interviewer == '1':
         is_interviewer = True
@@ -53,47 +65,49 @@ def checkSession(id):
     
     return 'Session not found'
 
-@app.route('/delUser')
-def delUser():
+# @app.route('/delUser')
+# def delUser():
     
-    # Keep track of user and whether one has been found
-    user_found = False
-    user = None
+#     # Keep track of user and whether one has been found
+#     user_found = False
+#     user = None
 
-    # Try to find by username and delete
-    try:
-        username = request.args.get('username')
-        user = User.query.filter_by(username=username).first()
-        if user:
-            user_found = True
-            db.session.delete(user)
+#     # Try to find by username and delete
+#     try:
+#         username = request.args.get('username')
+#         user = User.query.filter_by(username=username).first()
+#         if user:
+#             user_found = True
+#             db.session.delete(user)
         
-    except Exception as e:
-        user_found = False
+#     except Exception as e:
+#         user_found = False
         
-    # If user wasn't found by username, try by id
-    if user_found == False:
-        try:
-            user_id = request.args.get('id')
-            user = User.query.get(int(user_id,10))
-            if user:
-                user_found = True
-                db.session.delete(user)
+#     # If user wasn't found by username, try by id
+#     if user_found == False:
+#         try:
+#             user_id = request.args.get('id')
+#             user = User.query.get(int(user_id,10))
+#             if user:
+#                 user_found = True
+#                 db.session.delete(user)
 
-        except Exception as e:
-            user_found = False
+#         except Exception as e:
+#             user_found = False
 
-    # If user found commit changes and return username else return 'user not found'
-    if user_found == False:
-        return 'User not found'
-    else:
-        db.session.commit()
-        return 'Deleted user: {}'.format(user.username)
+#     # If user found commit changes and return username else return 'user not found'
+#     if user_found == False:
+#         return 'User not found'
+#     else:
+#         db.session.commit()
+#         return 'Deleted user: {}'.format(user.username)
 
-@app.route('/login/<email>/<password>')
+@app.route('/login')
 @cross_origin(origin="*",headers=["Content-Type","Authorization"])
-def login(email,password):
+def login():
     try:
+        email = request.args.get('username')
+        password = request.args.get('password')
         user = User.query.filter_by(email=email).first()
         if user.check_password_hash(password):
             uuid = str(uuid4())
