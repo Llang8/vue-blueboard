@@ -5,7 +5,7 @@
         <span v-if='prompt'>{{ prompt.editor_value }}</span></div>
     <div id="shell">
       <div class="shell-content">
-        <p>Interactive JavaScript Shell</p>
+        <p>Interactive JavaScript Shell - Type 'help' for a list of commands</p>
       </div>
       <div class="input-line"><span style="font-size: 10px;">></span>
         <form class="command-form" v-on:submit.prevent="runCommand()">
@@ -33,7 +33,8 @@ export default {
             commands: ['help - see a list of commands', 
                 'random - returns a random float between 0 and 1', 
                 'clear - clears shell',
-                "run VARIABLES - runs all code in the editor and prints the value of the variable names past"]
+                "run VARIABLES - runs all code in the editor and prints the value of the variable names past",
+                "You can call a function from here by calling it as you normally would."]
         }
     },
     /************************************************************* 
