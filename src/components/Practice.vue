@@ -35,7 +35,9 @@ export default {
     data() {
         return {
             promptHandler: null,
-            prompt: '',
+            prompt: {
+                body: 'Press "New Prompt" to get a prompt'
+            },
             checkResponse: '',
             difficulty: '1'
         }
@@ -77,16 +79,6 @@ export default {
     /* Set initial prompt */
     created() {
         this.promptHandler = new PromptHandler();
-        var ctx = this;
-        this.promptHandler.getPrompt(this.difficulty).then(res => {
-            // Reset editor value, switch escaped newlines to regular new lines
-            console.log(JSON.stringify(res));
-            var editor_value = JSON.stringify(res.editor_value)
-            res.editor_value = editor_value.replace(/\\n/g, '\n').replace(/\\/g, '')
-            // Get rid of double quotes on ends from JSON.stringify
-            res.editor_value = res.editor_value.slice(1,res.editor_value.length-1)
-            ctx.prompt = res;
-        })
     },
     components: {
         Editor
