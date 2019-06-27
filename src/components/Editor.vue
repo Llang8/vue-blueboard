@@ -210,6 +210,10 @@ export default {
         width: 100%;
     }
 
+    #shell {
+        width: 100%;
+    }
+
     .result-wrapper {
         width: 100%;
         height: 25%;
