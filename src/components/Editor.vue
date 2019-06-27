@@ -109,7 +109,11 @@ export default {
                     args = ['result']
                 }
                 this.aceHandler.runCode(this.editor.getValue(), args).forEach((result) => {
-                    this.printOutput(result);     
+                    this.printOutput(result);
+                    var value = result.split(": ");
+                    value.shift();
+                    console.log(value.join(": "));
+                    this.$store.state.result = value;
                 });
             } else if( this.shellInput.includes('(') && this.shellInput.includes(')')) {
                 var functionName = this.shellInput.split('(')[0];

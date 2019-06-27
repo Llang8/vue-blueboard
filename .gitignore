@@ -11,6 +11,9 @@ yarn-error.log
 *.njsproj
 *.sln
 
+# Ignore config file
+# src/config.js
+
 backend/Flask/blueboard-env/
 backend/Flask/blueboard-flask/
 backend/Flask/config.py
