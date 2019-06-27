@@ -108,6 +108,7 @@ def login():
     try:
         email = request.args.get('username')
         password = request.args.get('password')
+
         user = User.query.filter_by(email=email).first()
         if user.check_password_hash(password):
             uuid = str(uuid4())
@@ -172,7 +173,7 @@ def randomPrompt(difficulty):
 # Below begins routes for Admin Panel
 #############################################
 
-@app.route('/login',methods=["GET","POST"])
+@app.route('/adminLogin',methods=["GET","POST"])
 def loginAdmin():
     if current_user.is_authenticated:
         return redirect(url_for('showPromptForm'))

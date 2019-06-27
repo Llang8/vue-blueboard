@@ -119,7 +119,10 @@ export default {
             console.log(this.errors)
         },
         submitLogin() {
-            return axios({ url: `${config.flaskEndpoint}login/${this.email}/${this.password}`, method:'get', timeout:8000})
+            return axios({ url: `${config.flaskEndpoint}login`,data: {
+                email: this.email,
+                password: this.password
+            }, method:'post', timeout:8000})
             .then(response => {
                 console.log(response.data);
                 if(response.data == 'Password Incorrect') {
@@ -134,7 +137,7 @@ export default {
             .catch(error =>  console.error(error))
         },
         submitRegister() {
-            return axios({ url: `${config.flaskEndpoint}addUser/${this.username}`, method:'get', timeout:8000})
+            return axios({ url: `${config.flaskEndpoint}addUser/${this.username}`, method:'post', timeout:8000})
             .then(response => {
                 console.log(response.data);
                 if(response.data == 'Password Incorrect') {
