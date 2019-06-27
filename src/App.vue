@@ -80,7 +80,7 @@ export default {
 </script>
 
 <style>
-body {
+body,html {
   margin: 0;
   background: rgb(58, 47, 78);
 }
@@ -91,9 +91,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: white;
-  height: 100vh;
-  width: 100vw;
-  overflow-x: hidden;
+  overflow-x:hidden;
 }
 
 a {
@@ -112,7 +110,7 @@ header {
   align-items: center;
   height: 50px;
   padding: 0 10px;
-  width: calc(100% - 20px);
+  width: calc(100vw - 20px);
   background: rgb(87, 73, 112);
 }
 

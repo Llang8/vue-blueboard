@@ -82,13 +82,13 @@ export default {
 }
 
 .editor-wrapper {
-    width: 100vw;
+    width: 100%;
     min-width: 300px;
-    height: 80vh;
+    height: calc(80vh - 1px);
 }
 
 .userchat {
-    width: 100vw;
+    width: calc(100%);
     height: calc(15vh);
     background: #272822;
 }
