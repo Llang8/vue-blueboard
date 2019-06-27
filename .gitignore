@@ -12,7 +12,7 @@ yarn-error.log
 *.sln
 
 # Ignore config file
-# src/config.js
+src/config.js
 
 backend/Flask/blueboard-env/
 backend/Flask/blueboard-flask/
