@@ -11,7 +11,7 @@ import datetime
 # This is a list of user session id's, this is for TESTING only
 userSessions = []
 
-@app.route('/addUser')
+@app.route('/addUser', methods=["POST"])
 @cross_origin(origin="*",headers=["Content-Type","Authorization"])
 def addUser():
 
@@ -102,7 +102,7 @@ def checkSession(id):
 #         db.session.commit()
 #         return 'Deleted user: {}'.format(user.username)
 
-@app.route('/login')
+@app.route('/login', methods=["POST"])
 @cross_origin(origin="*",headers=["Content-Type","Authorization"])
 def login():
     try:
